@@ -7,6 +7,7 @@ import BusinessesManager from '../../components/Admin/BusinessesManager';
 import CategoriesManager from '../../components/Admin/CategoriesManager';
 import ProfileManager from '../../components/Admin/ProfileManager';
 import HomeImagesManager from '../../components/Admin/HomeImagesManager';
+import AIAssistantManager from '../../components/Admin/AIAssistantManager';
 
 const AdminDashboard = () => {
   const [session, setSession] = useState(null);
@@ -178,6 +179,25 @@ const AdminDashboard = () => {
               </svg>
             </button>
           </div>
+          
+          <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.1)', margin: '0.5rem 0' }}></div>
+          
+          <button 
+            onClick={() => setActiveTab('ai_assistant')}
+            style={{
+              background: activeTab === 'ai_assistant' ? 'rgba(255,255,255,0.1)' : 'transparent',
+              border: 'none',
+              padding: '1rem',
+              color: 'var(--accent)',
+              textAlign: 'left',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              transition: 'background 0.3s',
+              fontWeight: '600'
+            }}
+          >
+            AI Assistant Logs
+          </button>
         </div>
 
         <button 
@@ -207,6 +227,7 @@ const AdminDashboard = () => {
         {activeTab === 'categories' && <CategoriesManager />}
         {activeTab === 'clients' && <ClientsManager />}
         {activeTab === 'businesses' && <BusinessesManager />}
+        {activeTab === 'ai_assistant' && <AIAssistantManager />}
       </div>
     </div>
   );

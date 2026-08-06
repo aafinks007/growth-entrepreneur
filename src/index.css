@@ -394,3 +394,36 @@ footer {
   background: rgba(255, 255, 255, 0.4);
 }
 
+/* AI Assistant & Admin Responsive Overrides */
+@media (max-width: 600px) {
+  /* Chat Window */
+  .ai-chat-window {
+    width: calc(100vw - 2rem) !important;
+    right: 1rem !important;
+    bottom: 90px !important;
+    height: 65vh !important;
+  }
+  
+  /* Chat Button */
+  .ai-chat-button {
+    right: 1rem !important;
+    bottom: 90px !important;
+    width: 55px !important;
+    height: 55px !important;
+  }
+  
+  /* Chat Tooltip */
+  .ai-chat-tooltip {
+    right: 5rem !important;
+    bottom: 100px !important;
+    font-size: 0.85rem !important;
+    padding: 8px 12px !important;
+  }
+
+  /* Admin Dashboard AI Panel */
+  .admin-ai-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+}
+

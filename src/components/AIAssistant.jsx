@@ -1,10 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Bot, ImagePlus } from 'lucide-react';
+import { supabase } from '../../supabaseClient';
 
 const AIAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [settings, setSettings] = useState({ avatar_url: '/aafin-avatar.jpg', waving_avatar_url: '/aafin-avatar-waving.jpg' });
+  const [sessionId] = useState(crypto.randomUUID ? crypto.randomUUID() : Date.now().toString());
   const [messages, setMessages] = useState([
     { role: 'assistant', content: "Hi there! 👋 I am AI Aafin, your Growth Entrepreneur. How can I help you scale your business today? 🚀💡" }
   ]);
@@ -21,6 +24,17 @@ const AIAssistant = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, isLoading]);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const { data } = await supabase.from('ai_settings').select('avatar_url, waving_avatar_url').eq('id', 1).single();
+      if (data) {
+        if (data.avatar_url) setSettings(prev => ({ ...prev, avatar_url: data.avatar_url }));
+        if (data.waving_avatar_url) setSettings(prev => ({ ...prev, waving_avatar_url: data.waving_avatar_url }));
+      }
+    };
+    fetchSettings();
+  }, []);
 
   useEffect(() => {
     if (window.location.pathname !== '/') return;
@@ -75,7 +89,8 @@ const AIAssistant = () => {
         body: JSON.stringify({ 
           history: messages.slice(1).map(m => ({ role: m.role, content: m.content })), 
           message: userMessage.content,
-          image: payloadImage
+          image: payloadImage,
+          sessionId: sessionId
         })
       });
 
@@ -100,6 +115,7 @@ const AIAssistant = () => {
       <AnimatePresence>
         {!isOpen && (
           <motion.button
+            className="ai-chat-button"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
@@ -131,19 +147,19 @@ const AIAssistant = () => {
       </AnimatePresence>
 
       {/* Tooltip */}
-      <AnimatePresence>
-        {!isOpen && showTooltip && (
-          <motion.div
-            initial={{ opacity: 0, x: 20, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 20, scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            style={{
-              position: 'fixed',
-              bottom: '110px',
-              right: '6.5rem',
-              background: '#fff',
-              color: '#111',
+        <AnimatePresence>
+          {showTooltip && (
+            <motion.div
+              className="ai-chat-tooltip"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              style={{
+                position: 'fixed',
+                bottom: '110px',
+                right: '6.5rem',
+                backgroundColor: '#ffffff',
+                color: '#333',
               padding: '10px 16px',
               borderRadius: '20px',
               borderBottomRightRadius: '4px',
@@ -160,7 +176,7 @@ const AIAssistant = () => {
             onClick={() => { setIsOpen(true); setShowTooltip(false); }}
           >
             <motion.img 
-              src="/aafin-avatar-waving.jpg" 
+              src={settings.waving_avatar_url} 
               alt="Aafin Waving" 
               animate={{ rotate: [0, 10, -10, 10, 0, 0] }}
               transition={{ repeat: Infinity, duration: 2, repeatDelay: 1 }}
@@ -193,10 +209,10 @@ const AIAssistant = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            className="ai-chat-window"
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
             style={{
               position: 'fixed',
               bottom: '100px',
@@ -226,7 +242,7 @@ const AIAssistant = () => {
               backgroundColor: 'rgba(59, 130, 246, 0.1)'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <img src="/aafin-avatar.jpg" alt="Aafin" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent)' }} />
+                <img src={settings.avatar_url} alt="Aafin" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent)' }} />
                 <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '600' }}>AI Aafin</h3>
               </div>
               <button 
@@ -255,7 +271,7 @@ const AIAssistant = () => {
                   maxWidth: '90%'
                 }}>
                   {msg.role === 'assistant' && (
-                    <img src="/aafin-avatar.jpg" alt="AI" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, marginBottom: '2px' }} />
+                    <img src={settings.avatar_url} alt="AI" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, marginBottom: '2px' }} />
                   )}
                   <div 
                     style={{
@@ -283,7 +299,7 @@ const AIAssistant = () => {
               
               {isLoading && (
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-end', alignSelf: 'flex-start' }}>
-                  <img src="/aafin-avatar.jpg" alt="AI" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, marginBottom: '2px' }} />
+                  <img src={settings.avatar_url} alt="AI" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, marginBottom: '2px' }} />
                   <div style={{
                     backgroundColor: 'rgba(255, 255, 255, 0.08)',
                     padding: '0.75rem 1rem',
