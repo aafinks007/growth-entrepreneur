@@ -1,0 +1,106 @@
+[
+  {
+    "id": 2,
+    "title": "Data-Driven Ad Campaigns",
+    "category": "Advertising",
+    "slug": "data-driven-ad-campaigns",
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800",
+    "items": [
+      {
+        "id": "ad-1",
+        "title": "Qfit Gym Ad Campaign",
+        "category": "Meta Ads",
+        "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800",
+        "link": ""
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Social Media Growth",
+    "category": "Branding",
+    "slug": "social-media-growth",
+    "image": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=80&w=800",
+    "items": [
+      {
+        "id": "sm-1",
+        "title": "Mamma Cares Instagram Growth",
+        "category": "Social Media Management",
+        "image": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=80&w=800",
+        "link": ""
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "High-Converting Websites",
+    "category": "Web Development",
+    "slug": "high-converting-websites",
+    "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800",
+    "items": [
+      {
+        "id": "web-1",
+        "title": "Designsouqa E-Commerce Store",
+        "category": "Web Development",
+        "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800",
+        "link": ""
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "title": "SEO & Web Optimization",
+    "category": "Digital Marketing",
+    "slug": "seo-web-optimization",
+    "image": "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&q=80&w=800",
+    "items": [
+      {
+        "id": "seo-1",
+        "title": "Orbitrix Vision SEO Optimization",
+        "category": "SEO",
+        "image": "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&q=80&w=800",
+        "link": ""
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Content Strategy",
+    "category": "Creative Media",
+    "slug": "content-strategy",
+    "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800",
+    "items": [
+      {
+        "id": "cs-1",
+        "title": "Tripnoc Brand Strategy",
+        "category": "Content Strategy",
+        "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800",
+        "link": ""
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Video Marketing",
+    "category": "Videography",
+    "slug": "video-marketing",
+    "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=800",
+    "items": [
+      {
+        "id": "vm-1",
+        "title": "Sports & Gym Video Campaign",
+        "category": "Videography",
+        "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=800",
+        "video": "/sports and gym.mp4",
+        "link": ""
+      },
+      {
+        "id": "vm-2",
+        "title": "Sports Way Trading Promo Video",
+        "category": "Videography",
+        "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=800",
+        "link": ""
+      }
+    ]
+  }
+]

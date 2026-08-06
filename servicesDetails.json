@@ -1,0 +1,268 @@
+[
+  {
+    "slug": "invitation-website",
+    "name": "Invitation Website",
+    "category": "Websites",
+    "description": "Make a lasting impression with a beautifully crafted, custom invitation website. Perfect for weddings, corporate events, and special celebrations, our invitation websites are designed to provide a seamless RSVP experience while capturing the essence of your event.",
+    "features": [
+      "Custom Design tailored to your event theme",
+      "Interactive RSVP Forms",
+      "Event Details & Itinerary sections",
+      "Photo Galleries",
+      "Mobile-friendly and Responsive"
+    ],
+    "benefits": "Reduce paper waste, easily track attendees, and give your guests a modern, premium experience."
+  },
+  {
+    "slug": "portfolio-website",
+    "name": "Portfolio Website",
+    "category": "Websites",
+    "description": "Showcase your work and professional achievements with a sleek and modern portfolio website. Designed specifically for creatives, freelancers, and professionals who want to stand out and attract high-value clients.",
+    "features": [
+      "Dynamic project galleries",
+      "About Me & Resume sections",
+      "Client Testimonials",
+      "Contact Forms & Social Links",
+      "SEO optimized for personal branding"
+    ],
+    "benefits": "Build trust, demonstrate your expertise visually, and make it easy for potential clients or employers to contact you."
+  },
+  {
+    "slug": "standard-business-site",
+    "name": "Standard Business Site",
+    "category": "Websites",
+    "description": "Establish a strong online presence for your company with a professional business website. We build fast, secure, and easily navigable websites that effectively communicate your brand's value proposition to your target audience.",
+    "features": [
+      "Home, About, Services, and Contact pages",
+      "Fast loading speeds and secure hosting setup",
+      "Integration with Google Analytics",
+      "Lead generation forms",
+      "Mobile Responsive Design"
+    ],
+    "benefits": "Increase your brand's credibility, capture leads 24/7, and provide essential information to your customers."
+  },
+  {
+    "slug": "ecommerce-platform",
+    "name": "Ecommerce Platform",
+    "category": "Websites",
+    "description": "Launch your online store with a robust and scalable ecommerce platform. From product listings to secure checkout, we provide end-to-end solutions to help you sell your products or services online effectively.",
+    "features": [
+      "Secure Payment Gateway Integration",
+      "Product Catalog and Inventory Management",
+      "User Accounts and Order Tracking",
+      "Shopping Cart and Wishlist functionality",
+      "Mobile-optimized Checkout process"
+    ],
+    "benefits": "Expand your reach globally, automate your sales process, and provide a seamless shopping experience for your customers."
+  },
+  {
+    "slug": "ai-agents",
+    "name": "AI Agents",
+    "category": "Websites",
+    "description": "Revolutionize your customer support and business operations by integrating advanced AI agents directly into your website. Our custom AI solutions can handle inquiries, book appointments, and assist customers 24/7.",
+    "features": [
+      "24/7 Automated Customer Support",
+      "Natural Language Processing for human-like conversations",
+      "Integration with your business knowledge base",
+      "Lead qualification and data collection",
+      "Seamless handover to human agents when necessary"
+    ],
+    "benefits": "Reduce support costs, increase customer satisfaction with instant responses, and automate repetitive tasks."
+  },
+  {
+    "slug": "meta-ads",
+    "name": "Meta Ads (FB & IG)",
+    "category": "Advertising",
+    "description": "Maximize your ROI with highly targeted Meta advertising campaigns on Facebook and Instagram. We leverage advanced audience targeting, compelling creatives, and AI-driven optimization to generate high-quality leads and drive sales.",
+    "features": [
+      "Comprehensive Audience Research and Targeting",
+      "A/B Testing for Ad Creatives and Copy",
+      "Retargeting Campaigns to capture lost leads",
+      "Detailed Performance Tracking and Reporting",
+      "Budget Optimization for maximum ROI"
+    ],
+    "benefits": "Reach your ideal customers where they spend their time, increase brand awareness, and drive measurable conversions."
+  },
+  {
+    "slug": "google-ads",
+    "name": "Google Ads",
+    "category": "Advertising",
+    "description": "Capture high-intent customers exactly when they are searching for your products or services. Our Google Ads management ensures your business appears at the top of search results, driving qualified traffic to your website.",
+    "features": [
+      "In-depth Keyword Research and Selection",
+      "Search, Display, and Video (YouTube) Campaigns",
+      "Landing Page Optimization recommendations",
+      "Conversion Tracking Setup",
+      "Continuous Bid and Budget Management"
+    ],
+    "benefits": "Generate immediate traffic, pay only for clicks (PPC), and target users with high purchasing intent."
+  },
+  {
+    "slug": "tiktok-ads",
+    "name": "Tiktok Ads",
+    "category": "Advertising",
+    "description": "Tap into the fastest-growing social media platform with engaging TikTok advertising campaigns. We create authentic, trend-driven video ads that resonate with younger demographics and drive explosive brand growth.",
+    "features": [
+      "Trend-based Creative Strategy",
+      "In-Feed Ads and TopView Campaigns",
+      "Influencer/Creator Collaborations",
+      "Hashtag Challenges setup",
+      "Performance Analytics and Optimization"
+    ],
+    "benefits": "Achieve viral reach, engage with Gen Z and Millennial audiences, and build brand authenticity."
+  },
+  {
+    "slug": "snapchat-ads",
+    "name": "Snapchat Ads",
+    "category": "Advertising",
+    "description": "Connect with a highly active and engaged audience through immersive Snapchat Ads. Utilizing AR lenses, filters, and story ads, we help your brand create memorable interactive experiences.",
+    "features": [
+      "Vertical Video Story Ads",
+      "Custom AR Lenses and Filters",
+      "Location-based Targeting",
+      "App Install and E-commerce Campaigns",
+      "Real-time Performance Dashboard"
+    ],
+    "benefits": "Drive high engagement rates, leverage augmented reality for brand interaction, and reach a unique demographic."
+  },
+  {
+    "slug": "on-page-optimization",
+    "name": "On-page Optimization",
+    "category": "SEO",
+    "description": "Enhance your website's visibility on search engines by optimizing individual web pages. We ensure your site's structure, content, and HTML tags are perfectly aligned with best practices to rank higher and earn more relevant traffic.",
+    "features": [
+      "Keyword Research and Implementation",
+      "Meta Title and Description Optimization",
+      "Header Tag (H1, H2, etc.) Structuring",
+      "Image Alt Text and Compression",
+      "Internal Linking Strategy"
+    ],
+    "benefits": "Improve organic search rankings, enhance user experience, and increase website traffic."
+  },
+  {
+    "slug": "off-page-optimization",
+    "name": "Off-page Optimization",
+    "category": "SEO",
+    "description": "Build your website's authority and credibility across the internet. Our off-page SEO strategies focus on acquiring high-quality backlinks and establishing your brand as a trusted industry leader.",
+    "features": [
+      "High-Quality Link Building",
+      "Guest Blogging and Outreach",
+      "Brand Mentions and PR",
+      "Social Media Signals Integration",
+      "Competitor Backlink Analysis"
+    ],
+    "benefits": "Boost domain authority, increase referral traffic, and achieve long-term ranking stability."
+  },
+  {
+    "slug": "blogs-writing",
+    "name": "Blogs Writing",
+    "category": "SEO",
+    "description": "Fuel your content marketing and SEO efforts with expertly written, engaging blog posts. We create high-quality, keyword-rich articles that educate your audience, answer their questions, and drive organic traffic.",
+    "features": [
+      "SEO-Optimized Content Creation",
+      "Topic Ideation based on Search Trends",
+      "Engaging and Authoritative Tone",
+      "Formatting for Readability",
+      "Integration of Call-to-Actions (CTAs)"
+    ],
+    "benefits": "Establish industry authority, keep your website updated for search engines, and generate consistent inbound traffic."
+  },
+  {
+    "slug": "google-my-business",
+    "name": "Google My Business",
+    "category": "SEO",
+    "description": "Dominate local search results and attract nearby customers by optimizing your Google My Business profile. We manage your listing to ensure your business stands out in Google Maps and local search queries.",
+    "features": [
+      "Profile Setup and Verification",
+      "Accurate Business Information (NAP) consistency",
+      "Review Management and Responses",
+      "Regular Post Updates and Offers",
+      "Local Citation Building"
+    ],
+    "benefits": "Increase foot traffic to your physical location, build local trust, and appear in the coveted 'Local Pack'."
+  },
+  {
+    "slug": "content-creation",
+    "name": "Content Creation",
+    "category": "Branding & Media",
+    "description": "Tell your brand's story through compelling, high-quality content. From engaging copy to striking visuals, we produce creative assets that capture attention and communicate your message effectively across all channels.",
+    "features": [
+      "Copywriting for Ads, Websites, and Socials",
+      "Graphic Design for Digital Assets",
+      "Infographics and Visual Data",
+      "Email Newsletter Content",
+      "Brand Voice Development"
+    ],
+    "benefits": "Maintain brand consistency, engage your audience emotionally, and drive higher conversion rates."
+  },
+  {
+    "slug": "influencer-marketing",
+    "name": "Influencer Marketing",
+    "category": "Branding & Media",
+    "description": "Amplify your brand's reach by partnering with key influencers in your niche. We manage end-to-end influencer campaigns, from identifying the right personalities to tracking the campaign's success.",
+    "features": [
+      "Influencer Identification and Vetting",
+      "Campaign Strategy and Briefing",
+      "Contract Negotiation",
+      "Content Review and Approval",
+      "ROI and Performance Tracking"
+    ],
+    "benefits": "Leverage established trust, reach highly targeted audiences, and generate authentic social proof."
+  },
+  {
+    "slug": "social-media-management",
+    "name": "Social Media Management",
+    "category": "Branding & Media",
+    "description": "Build a loyal community and maintain an active, professional presence across all major social networks. We handle everything from content calendar creation to community engagement.",
+    "features": [
+      "Custom Content Strategy and Calendar",
+      "Daily Posting and Scheduling",
+      "Community Management and Engagement",
+      "Platform-specific Optimization",
+      "Monthly Performance Reports"
+    ],
+    "benefits": "Save time, ensure consistent brand messaging, and foster strong relationships with your audience."
+  },
+  {
+    "slug": "posters-and-reels",
+    "name": "Posters & Reels",
+    "category": "Branding & Media",
+    "description": "Capture the short-attention-span audience with eye-catching digital posters and highly engaging short-form video content (Reels/Shorts). Designed specifically for virality and high engagement.",
+    "features": [
+      "Custom Graphic Design for Promotional Posters",
+      "Scripting and Storyboarding for Reels",
+      "Dynamic Video Editing with Trending Audio",
+      "Platform-specific Formatting (9:16 ratio)",
+      "High-resolution Exports"
+    ],
+    "benefits": "Maximize reach on Instagram and TikTok algorithms, stop the scroll, and deliver your message quickly."
+  },
+  {
+    "slug": "professional-photography",
+    "name": "Professional Photography",
+    "category": "Branding & Media",
+    "description": "Elevate your brand's visual identity with high-resolution, professional photography. Whether it's product shots, corporate headshots, or event coverage, we deliver stunning images that make your brand look premium.",
+    "features": [
+      "Product and E-commerce Photography",
+      "Corporate Headshots and Team Photos",
+      "Event Coverage",
+      "High-end Retouching and Editing",
+      "Optimized Formats for Web and Print"
+    ],
+    "benefits": "Enhance your website and marketing materials, build trust with professional imagery, and showcase your products beautifully."
+  },
+  {
+    "slug": "cinematic-videography",
+    "name": "Cinematic Videography",
+    "category": "Branding & Media",
+    "description": "Bring your brand to life with cinematic, high-quality video production. We handle everything from concept to final edit, creating promotional videos, corporate documentaries, and commercials that leave a lasting impact.",
+    "features": [
+      "Concept Development and Scriptwriting",
+      "Professional Filming with 4K Cinema Cameras",
+      "Drone and Aerial Cinematography",
+      "Advanced Post-Production and Color Grading",
+      "Sound Design and Royalty-Free Music Licensing"
+    ],
+    "benefits": "Engage audiences powerfully through storytelling, increase conversion rates on landing pages, and establish a premium brand image."
+  }
+]
