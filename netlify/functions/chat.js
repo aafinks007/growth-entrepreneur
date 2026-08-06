@@ -1,21 +1,23 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-export const handler = async (event, context) => {
+export default async (req, context) => {
   // Only allow POST requests
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+  if (req.method !== 'POST') {
+    return new Response('Method Not Allowed', { status: 405 });
   }
 
   try {
-    const { history, message } = JSON.parse(event.body);
+    const body = await req.json();
+    const { history, message } = body;
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY || Netlify.env.get("GEMINI_API_KEY");
     if (!apiKey) {
-      return { statusCode: 500, body: JSON.stringify({ error: 'API key is not configured' }) };
+      return new Response(JSON.stringify({ error: 'API key is not configured' }), { status: 500 });
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Updated to gemini-2.5-flash as per Netlify AI Gateway requirements
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     // Format history for Gemini API
     const formattedHistory = history.map(msg => ({
@@ -50,18 +52,14 @@ Keep responses under 100 words when possible. Use emojis occasionally.`;
     const result = await chat.sendMessage(message);
     const responseText = result.response.text();
 
-    return {
-      statusCode: 200,
+    return new Response(JSON.stringify({ reply: responseText }), {
+      status: 200,
       headers: {
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ reply: responseText })
-    };
+      }
+    });
   } catch (error) {
     console.error('Error generating AI response:', error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to generate response' })
-    };
+    return new Response(JSON.stringify({ error: 'Failed to generate response' }), { status: 500 });
   }
 };
