@@ -16,7 +16,7 @@ export default async (req, context) => {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
     // Format history for Gemini API
     const formattedHistory = history.map(msg => ({
