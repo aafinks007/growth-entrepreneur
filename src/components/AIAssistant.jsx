@@ -9,7 +9,7 @@ const AIAssistant = () => {
   const [settings, setSettings] = useState({ avatar_url: '/aafin-avatar.jpg', waving_avatar_url: '/aafin-avatar-waving.jpg' });
   const [sessionId] = useState(crypto.randomUUID ? crypto.randomUUID() : Date.now().toString());
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: "Hi there! 👋 I am AI Aafin, your Growth Entrepreneur. How can I help you scale your business today? 🚀💡" }
+    { role: 'assistant', content: "Hi there! 👋 I am Aafin, your Growth Entrepreneur. How can I help you scale your business today? 🚀💡" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -183,7 +183,7 @@ const AIAssistant = () => {
               style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent)', transformOrigin: 'bottom center' }} 
             />
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '0.8rem', color: '#666', fontWeight: '500' }}>AI Aafin</span>
+              <span style={{ fontSize: '0.8rem', color: '#666', fontWeight: '500' }}>Aafin</span>
               <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 Hi! How can I help you? 
                 <motion.span
@@ -243,7 +243,7 @@ const AIAssistant = () => {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <img src={settings.avatar_url} alt="Aafin" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent)' }} />
-                <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '600' }}>AI Aafin</h3>
+                <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '600' }}>Aafin</h3>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}

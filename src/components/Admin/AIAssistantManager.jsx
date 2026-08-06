@@ -187,7 +187,7 @@ const AIAssistantManager = () => {
                 </div>
 
                 <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '1rem', borderRadius: '8px', borderLeft: '4px solid #666' }}>
-                  <div style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '0.25rem', fontWeight: 'bold' }}>AI Aafin Replied:</div>
+                  <div style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '0.25rem', fontWeight: 'bold' }}>Aafin:</div>
                   <div style={{ color: '#e0e0e0', whiteSpace: 'pre-wrap', fontSize: '0.95rem' }}>{log.ai_response}</div>
                 </div>
               </div>

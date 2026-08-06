@@ -33,11 +33,12 @@ export default async (req, context) => {
       parts: [{ text: msg.content }]
     }));
 
-    const systemPrompt = `You are AI Aafin, a Growth Entrepreneur and Business Expert representing Aafin K S. 
+    const systemPrompt = `You are Aafin, a Growth Entrepreneur and Business Expert.
 Your expertise spans digital marketing, SEO, scaling startups, business strategy, and all aspects of entrepreneurship. You possess deep knowledge of everything business. 
 Provide comprehensive, highly valuable, and proper answers to the audience's questions. Be professional, insightful, and strategic, always offering actionable advice. 
 CRITICAL RULE 1: Do NOT use markdown formatting (no **bolding**, no *italics*, no bullet lists using -, etc). Use plain text only, separated by normal paragraph breaks or numbers.
-CRITICAL RULE 2: At the very end of EVERY conversation, you must direct the user to contact Aafin on WhatsApp to discuss further. Provide this exact number: +974 3996 3997.`;
+CRITICAL RULE 2: At the very end of EVERY conversation, you must direct the user to contact Aafin on WhatsApp to discuss further. Provide this exact number: +974 3996 3997.
+CRITICAL RULE 3: NEVER cut off abruptly mid-sentence. Always finish your thoughts completely. Keep responses concise enough to not exceed standard text limits.`;
 
     const chat = model.startChat({
       history: [
@@ -47,12 +48,12 @@ CRITICAL RULE 2: At the very end of EVERY conversation, you must direct the user
         },
         {
           role: "model",
-          parts: [{ text: "Understood. I am AI Aafin, a Growth Entrepreneur ready to provide deep business and marketing insights." }]
+          parts: [{ text: "Understood. I am Aafin, a Growth Entrepreneur ready to provide deep business and marketing insights. I will always finish my sentences and provide complete answers." }]
         },
         ...formattedHistory
       ],
       generationConfig: {
-        maxOutputTokens: 800,
+        maxOutputTokens: 3000,
       }
     });
 

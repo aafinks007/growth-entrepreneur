@@ -398,10 +398,14 @@ footer {
 @media (max-width: 600px) {
   /* Chat Window */
   .ai-chat-window {
-    width: calc(100vw - 2rem) !important;
-    right: 1rem !important;
-    bottom: 90px !important;
-    height: 65vh !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    border-radius: 0 !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
   
   /* Chat Button */
