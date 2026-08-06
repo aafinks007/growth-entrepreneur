@@ -1,14 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, Bot } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, ImagePlus } from 'lucide-react';
 
 const AIAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: "Hi! I'm AI Aafin. Ask me any question about digital marketing, SEO, or web development!" }
+    { role: 'assistant', content: "Hi there! 👋 I am AI Aafin, your Growth Entrepreneur. How can I help you scale your business today? 🚀💡" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -19,13 +22,48 @@ const AIAssistant = () => {
     scrollToBottom();
   }, [messages, isLoading]);
 
+  useEffect(() => {
+    if (window.location.pathname !== '/') return;
+
+    let hideTimer;
+    const showTimer = setTimeout(() => {
+      if (!isOpen) {
+        setShowTooltip(true);
+        hideTimer = setTimeout(() => setShowTooltip(false), 10000);
+      }
+    }, 2000);
+
+    return () => {
+      clearTimeout(showTimer);
+      if (hideTimer) clearTimeout(hideTimer);
+    };
+  }, [isOpen]);
+
+  const handleImageSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 3 * 1024 * 1024) {
+        alert("Image is too large. Please select an image under 3MB.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage({ file, dataUrl: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSend = async (e) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if ((!input.trim() && !selectedImage) || isLoading) return;
 
-    const userMessage = { role: 'user', content: input.trim() };
+    const userMessage = { role: 'user', content: input.trim(), image: selectedImage?.dataUrl };
     setMessages(prev => [...prev, userMessage]);
+    
+    const payloadImage = selectedImage?.dataUrl || null;
     setInput('');
+    setSelectedImage(null);
     setIsLoading(true);
 
     try {
@@ -35,8 +73,9 @@ const AIAssistant = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ 
-          history: messages.slice(1), 
-          message: userMessage.content 
+          history: messages.slice(1).map(m => ({ role: m.role, content: m.content })), 
+          message: userMessage.content,
+          image: payloadImage
         })
       });
 
@@ -64,7 +103,7 @@ const AIAssistant = () => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
-            onClick={() => setIsOpen(true)}
+            onClick={() => { setIsOpen(true); setShowTooltip(false); }}
             style={{
               position: 'fixed',
               bottom: '100px', // Just above WhatsApp (which is 2rem/32px + 60px height)
@@ -88,6 +127,65 @@ const AIAssistant = () => {
           >
             <MessageCircle size={30} />
           </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Tooltip */}
+      <AnimatePresence>
+        {!isOpen && showTooltip && (
+          <motion.div
+            initial={{ opacity: 0, x: 20, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 20, scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            style={{
+              position: 'fixed',
+              bottom: '110px',
+              right: '6.5rem',
+              background: '#fff',
+              color: '#111',
+              padding: '10px 16px',
+              borderRadius: '20px',
+              borderBottomRightRadius: '4px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+              zIndex: 998,
+              cursor: 'pointer',
+              fontWeight: '600',
+              fontSize: '0.95rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              whiteSpace: 'nowrap'
+            }}
+            onClick={() => { setIsOpen(true); setShowTooltip(false); }}
+          >
+            <motion.img 
+              src="/aafin-avatar-waving.jpg" 
+              alt="Aafin Waving" 
+              animate={{ rotate: [0, 10, -10, 10, 0, 0] }}
+              transition={{ repeat: Infinity, duration: 2, repeatDelay: 1 }}
+              style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent)', transformOrigin: 'bottom center' }} 
+            />
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span style={{ fontSize: '0.8rem', color: '#666', fontWeight: '500' }}>AI Aafin</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                Hi! How can I help you? 
+                <motion.span
+                  animate={{ rotate: [0, 20, -10, 20, 0, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5, repeatDelay: 1 }}
+                  style={{ display: 'inline-block', transformOrigin: 'bottom right' }}
+                >
+                  👋
+                </motion.span>
+              </span>
+            </div>
+            <button 
+              onClick={(e) => { e.stopPropagation(); setShowTooltip(false); }} 
+              style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px', display: 'flex', alignItems: 'center', marginLeft: 'auto' }}
+            >
+              <X size={16} color="#666" />
+            </button>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -127,8 +225,8 @@ const AIAssistant = () => {
               alignItems: 'center',
               backgroundColor: 'rgba(59, 130, 246, 0.1)'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Bot color="var(--accent)" size={24} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <img src="/aafin-avatar.jpg" alt="Aafin" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent)' }} />
                 <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '600' }}>AI Aafin</h3>
               </div>
               <button 
@@ -149,43 +247,60 @@ const AIAssistant = () => {
               gap: '1rem'
             }}>
               {messages.map((msg, index) => (
-                <div 
-                  key={index} 
-                  style={{
-                    alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                    maxWidth: '85%',
-                    padding: '0.75rem 1rem',
-                    borderRadius: '12px',
-                    backgroundColor: msg.role === 'user' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.05)',
-                    color: '#fff',
-                    fontSize: '0.95rem',
-                    lineHeight: '1.4',
-                    borderBottomRightRadius: msg.role === 'user' ? '4px' : '12px',
-                    borderBottomLeftRadius: msg.role === 'assistant' ? '4px' : '12px',
-                  }}
-                >
-                  {msg.content}
+                <div key={index} style={{
+                  display: 'flex', 
+                  gap: '8px', 
+                  alignItems: 'flex-end',
+                  alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
+                  maxWidth: '90%'
+                }}>
+                  {msg.role === 'assistant' && (
+                    <img src="/aafin-avatar.jpg" alt="AI" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, marginBottom: '2px' }} />
+                  )}
+                  <div 
+                    style={{
+                      padding: '0.75rem 1rem',
+                      borderRadius: '16px',
+                      backgroundColor: msg.role === 'user' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.08)',
+                      color: '#fff',
+                      fontSize: '0.95rem',
+                      lineHeight: '1.4',
+                      borderBottomRightRadius: msg.role === 'user' ? '4px' : '16px',
+                      borderBottomLeftRadius: msg.role === 'assistant' ? '4px' : '16px',
+                    }}
+                  >
+                    {msg.image && (
+                      <img 
+                        src={msg.image} 
+                        alt="uploaded" 
+                        style={{ maxWidth: '100%', borderRadius: '8px', marginBottom: msg.content ? '8px' : '0' }} 
+                      />
+                    )}
+                    {msg.content && <div>{msg.content}</div>}
+                  </div>
                 </div>
               ))}
               
               {isLoading && (
-                <div style={{
-                  alignSelf: 'flex-start',
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '12px',
-                  borderBottomLeftRadius: '4px',
-                  color: 'var(--text-secondary)'
-                }}>
-                  <motion.div
-                    animate={{ opacity: [0.4, 1, 0.4] }}
-                    transition={{ repeat: Infinity, duration: 1.5 }}
-                    style={{ display: 'flex', gap: '4px', alignItems: 'center' }}
-                  >
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'currentColor' }} />
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'currentColor' }} />
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'currentColor' }} />
-                  </motion.div>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-end', alignSelf: 'flex-start' }}>
+                  <img src="/aafin-avatar.jpg" alt="AI" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0, marginBottom: '2px' }} />
+                  <div style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    padding: '0.75rem 1rem',
+                    borderRadius: '16px',
+                    borderBottomLeftRadius: '4px',
+                    color: 'var(--text-secondary)'
+                  }}>
+                    <motion.div
+                      animate={{ opacity: [0.4, 1, 0.4] }}
+                      transition={{ repeat: Infinity, duration: 1.5 }}
+                      style={{ display: 'flex', gap: '4px', alignItems: 'center' }}
+                    >
+                      <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'currentColor' }} />
+                      <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'currentColor' }} />
+                      <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'currentColor' }} />
+                    </motion.div>
+                  </div>
                 </div>
               )}
               <div ref={messagesEndRef} />
@@ -195,8 +310,53 @@ const AIAssistant = () => {
             <div style={{
               padding: '1rem',
               borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem'
             }}>
-              <form onSubmit={handleSend} style={{ display: 'flex', gap: '0.5rem' }}>
+              <AnimatePresence>
+                {selectedImage && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    style={{ position: 'relative', width: 'fit-content' }}
+                  >
+                    <img src={selectedImage.dataUrl} alt="preview" style={{ height: '60px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)' }} />
+                    <button
+                      type="button"
+                      onClick={() => setSelectedImage(null)}
+                      style={{
+                        position: 'absolute', top: '-5px', right: '-5px',
+                        background: 'var(--accent)', border: 'none', borderRadius: '50%',
+                        width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: '#fff', cursor: 'pointer'
+                      }}
+                    >
+                      <X size={12} />
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <form onSubmit={handleSend} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  ref={fileInputRef} 
+                  onChange={handleImageSelect} 
+                  style={{ display: 'none' }} 
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  style={{
+                    background: 'transparent', border: 'none', color: 'var(--text-secondary)',
+                    cursor: 'pointer', padding: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                  }}
+                  title="Attach Image"
+                >
+                  <ImagePlus size={20} />
+                </button>
                 <input
                   type="text"
                   value={input}
@@ -216,9 +376,9 @@ const AIAssistant = () => {
                 />
                 <button
                   type="submit"
-                  disabled={!input.trim() || isLoading}
+                  disabled={(!input.trim() && !selectedImage) || isLoading}
                   style={{
-                    backgroundColor: input.trim() && !isLoading ? 'var(--accent)' : 'rgba(255, 255, 255, 0.1)',
+                    backgroundColor: (input.trim() || selectedImage) && !isLoading ? 'var(--accent)' : 'rgba(255, 255, 255, 0.1)',
                     border: 'none',
                     borderRadius: '50%',
                     width: '42px',

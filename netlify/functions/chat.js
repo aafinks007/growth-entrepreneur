@@ -8,7 +8,7 @@ export default async (req, context) => {
 
   try {
     const body = await req.json();
-    const { history, message } = body;
+    const { history, message, image } = body;
 
     const apiKey = process.env.GEMINI_API_KEY || Netlify.env.get("GEMINI_API_KEY");
     if (!apiKey) {
@@ -24,12 +24,11 @@ export default async (req, context) => {
       parts: [{ text: msg.content }]
     }));
 
-    const systemPrompt = `You are AI Aafin, an advanced digital marketing AI assistant representing Aafin K S, an AI Digital Marketing Expert in Qatar. 
-Your goal is to answer audience questions related to digital marketing, SEO, Meta Ads, Google Ads, content creation, and web development. 
-Keep your responses professional, friendly, concise, and helpful. 
-If someone asks something outside your expertise (e.g., personal advice, general knowledge not related to business/marketing), politely decline and bring the conversation back to digital marketing.
-If they want to hire or contact Aafin, direct them to use the Contact page or the WhatsApp button on the bottom right. 
-Keep responses under 100 words when possible. Use emojis occasionally.`;
+    const systemPrompt = `You are AI Aafin, a Growth Entrepreneur and Business Expert representing Aafin K S. 
+Your expertise spans digital marketing, SEO, scaling startups, business strategy, and all aspects of entrepreneurship. You possess deep knowledge of everything business. 
+Provide comprehensive, highly valuable, and proper answers to the audience's questions. Be professional, insightful, and strategic, always offering actionable advice. 
+CRITICAL RULE 1: Do NOT use markdown formatting (no **bolding**, no *italics*, no bullet lists using -, etc). Use plain text only, separated by normal paragraph breaks or numbers.
+CRITICAL RULE 2: At the very end of EVERY conversation, you must direct the user to contact Aafin on WhatsApp to discuss further. Provide this exact number: +974 3996 3997.`;
 
     const chat = model.startChat({
       history: [
@@ -39,16 +38,32 @@ Keep responses under 100 words when possible. Use emojis occasionally.`;
         },
         {
           role: "model",
-          parts: [{ text: "Understood. I am AI Aafin, ready to help with digital marketing queries." }]
+          parts: [{ text: "Understood. I am AI Aafin, a Growth Entrepreneur ready to provide deep business and marketing insights." }]
         },
         ...formattedHistory
       ],
       generationConfig: {
-        maxOutputTokens: 250,
+        maxOutputTokens: 800,
       }
     });
 
-    const result = await chat.sendMessage(message);
+    let result;
+    if (image) {
+      const mimeType = image.match(/data:(.*?);base64/)?.[1] || "image/jpeg";
+      const base64Data = image.split(',')[1];
+      const parts = [
+        { text: message || "Analyze this image" },
+        {
+          inlineData: {
+            data: base64Data,
+            mimeType: mimeType
+          }
+        }
+      ];
+      result = await chat.sendMessage(parts);
+    } else {
+      result = await chat.sendMessage(message);
+    }
     const responseText = result.response.text();
 
     return new Response(JSON.stringify({ reply: responseText }), {
