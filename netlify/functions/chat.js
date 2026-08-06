@@ -16,8 +16,7 @@ export default async (req, context) => {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    // Updated to gemini-2.5-flash as per Netlify AI Gateway requirements
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     // Format history for Gemini API
     const formattedHistory = history.map(msg => ({
@@ -60,6 +59,6 @@ Keep responses under 100 words when possible. Use emojis occasionally.`;
     });
   } catch (error) {
     console.error('Error generating AI response:', error);
-    return new Response(JSON.stringify({ error: 'Failed to generate response' }), { status: 500 });
+    return new Response(JSON.stringify({ error: error.message || 'Failed to generate response' }), { status: 500 });
   }
 };

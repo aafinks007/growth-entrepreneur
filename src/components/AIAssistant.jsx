@@ -34,22 +34,22 @@ const AIAssistant = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        // We only send the history prior to the current user message
         body: JSON.stringify({ 
-          history: messages.slice(1), // Exclude the initial greeting
+          history: messages.slice(1), 
           message: userMessage.content 
         })
       });
 
+      const data = await response.json();
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch response');
+        throw new Error(data.error || 'Failed to fetch response');
       }
 
-      const data = await response.json();
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
     } catch (error) {
       console.error(error);
-      setMessages(prev => [...prev, { role: 'assistant', content: "Sorry, I'm having trouble connecting right now. Please try again later!" }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${error.message}` }]);
     } finally {
       setIsLoading(false);
     }
