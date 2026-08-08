@@ -292,7 +292,7 @@ const AIAssistant = () => {
                         style={{ maxWidth: '100%', borderRadius: '8px', marginBottom: msg.content ? '8px' : '0' }} 
                       />
                     )}
-                    {msg.content && <div>{msg.content}</div>}
+                    {msg.content && <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: '1.5' }}>{msg.content}</div>}
                   </div>
                 </div>
               ))}
