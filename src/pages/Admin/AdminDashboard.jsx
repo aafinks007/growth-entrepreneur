@@ -8,11 +8,12 @@ import CategoriesManager from '../../components/Admin/CategoriesManager';
 import ProfileManager from '../../components/Admin/ProfileManager';
 import HomeImagesManager from '../../components/Admin/HomeImagesManager';
 import AIAssistantManager from '../../components/Admin/AIAssistantManager';
+import OverviewDashboard from '../../components/Admin/OverviewDashboard';
 
 const AdminDashboard = () => {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('profile');
+  const [activeTab, setActiveTab] = useState('overview');
   const [showBusinesses, setShowBusinesses] = useState(true);
   const navigate = useNavigate();
 
@@ -58,6 +59,25 @@ const AdminDashboard = () => {
         <h3 style={{ color: 'var(--accent)', marginBottom: '2rem' }}>Admin Portal</h3>
         
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1, marginBottom: '2rem' }}>
+          <button 
+            onClick={() => setActiveTab('overview')}
+            style={{
+              background: activeTab === 'overview' ? 'rgba(255,255,255,0.1)' : 'transparent',
+              border: 'none',
+              padding: '1rem',
+              color: '#fff',
+              textAlign: 'left',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              transition: 'background 0.3s',
+              fontWeight: 'bold'
+            }}
+          >
+            Dashboard Overview
+          </button>
+          
+          <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.1)', margin: '0.5rem 0' }}></div>
+          
           <button 
             onClick={() => setActiveTab('profile')}
             style={{
@@ -221,6 +241,7 @@ const AdminDashboard = () => {
 
       {/* Main Content */}
       <div className="admin-content">
+        {activeTab === 'overview' && <OverviewDashboard setActiveTab={setActiveTab} />}
         {activeTab === 'profile' && <ProfileManager />}
         {activeTab === 'home_images' && <HomeImagesManager />}
         {activeTab === 'projects' && <ProjectsManager />}

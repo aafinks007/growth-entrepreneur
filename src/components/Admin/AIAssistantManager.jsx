@@ -157,42 +157,49 @@ const AIAssistantManager = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <h3 style={{ margin: 0, fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Clock size={20} color="var(--accent)" />
-          Recent Conversations
+          Recent Conversations (Total: {new Set(logs.map(l => l.session_id)).size})
         </h3>
         <button onClick={clearLogs} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}>
           <Trash2 size={16} /> Clear Logs
         </button>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
         {logs.length === 0 ? (
           <p style={{ color: '#888', fontStyle: 'italic', padding: '2rem', textAlign: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: '12px' }}>
             No chat logs found yet. When someone asks the AI a question, it will appear here!
           </p>
         ) : (
-          logs.map((log) => (
-            <div key={log.id} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '12px', padding: '1.5rem', border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', fontSize: '0.85rem', color: '#888' }}>
-                <span>Session: {log.session_id.substring(0, 8)}...</span>
-                <span>{new Date(log.created_at).toLocaleString()}</span>
-              </div>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div style={{ background: 'rgba(59, 130, 246, 0.1)', padding: '1rem', borderRadius: '8px', borderLeft: '4px solid var(--accent)' }}>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--accent)', marginBottom: '0.25rem', fontWeight: 'bold' }}>Visitor Asked:</div>
-                  <div style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    {log.user_message || '(No text provided)'}
-                    {log.has_image && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem' }}><ImageIcon size={12} /> Image Attached</span>}
-                  </div>
+          Array.from(new Set(logs.map(l => l.session_id))).map(sessionId => {
+            const sessionLogs = logs.filter(l => l.session_id === sessionId).reverse();
+            return (
+              <div key={sessionId} style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '12px', padding: '1.5rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', fontSize: '0.85rem', color: '#888', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.75rem' }}>
+                  <span><strong style={{ color: '#fff' }}>Session ID:</strong> {sessionId}</span>
+                  <span>{sessionLogs.length} messages</span>
                 </div>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {sessionLogs.map(log => (
+                    <div key={log.id} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      <div style={{ alignSelf: 'flex-end', maxWidth: '80%', background: 'rgba(59, 130, 246, 0.15)', padding: '1rem', borderRadius: '12px 12px 0 12px', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
+                        <div style={{ fontSize: '0.7rem', color: '#888', marginBottom: '0.25rem', textAlign: 'right' }}>{new Date(log.created_at).toLocaleTimeString()}</div>
+                        <div style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                          {log.has_image && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem' }}><ImageIcon size={12} /></span>}
+                          {log.user_message || '(No text provided)'}
+                        </div>
+                      </div>
 
-                <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '1rem', borderRadius: '8px', borderLeft: '4px solid #666' }}>
-                  <div style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '0.25rem', fontWeight: 'bold' }}>Aafin:</div>
-                  <div style={{ color: '#e0e0e0', whiteSpace: 'pre-wrap', fontSize: '0.95rem' }}>{log.ai_response}</div>
+                      <div style={{ alignSelf: 'flex-start', maxWidth: '80%', background: 'rgba(255, 255, 255, 0.05)', padding: '1rem', borderRadius: '12px 12px 12px 0', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                        <div style={{ fontSize: '0.7rem', color: 'var(--accent)', marginBottom: '0.25rem' }}>Aafin</div>
+                        <div style={{ color: '#e0e0e0', whiteSpace: 'pre-wrap', fontSize: '0.95rem' }}>{log.ai_response}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>
