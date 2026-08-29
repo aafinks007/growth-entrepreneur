@@ -14,7 +14,6 @@ const ProjectsManager = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [uploading, setUploading] = useState(false);
   
-  // Form State
   const [formData, setFormData] = useState({ 
     id: '', 
     category_id: '', 
@@ -23,7 +22,8 @@ const ProjectsManager = () => {
     business_id: '',
     image: '', 
     video: '', 
-    document: '' 
+    document: '',
+    website_link: ''
   });
 
   const fetchProjects = async () => {
@@ -74,7 +74,8 @@ const ProjectsManager = () => {
       business_id: project.business_id || '',
       image: project.image || '',
       video: project.video || '',
-      document: project.document || ''
+      document: project.document || '',
+      website_link: project.website_link || ''
     });
     setIsEditing(true);
     setIsAdding(true);
@@ -113,6 +114,57 @@ const ProjectsManager = () => {
     setUploading(false);
   };
 
+  const handleBulkUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    const defaultCategoryId = categories.length > 0 ? categories[0].id : null;
+    
+    if (!defaultCategoryId) {
+      alert('Please create at least one Category first before bulk uploading projects.');
+      return;
+    }
+
+    setUploading(true);
+    let uploadedCount = 0;
+    let errorCount = 0;
+
+    for (const file of files) {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage.from('portfolio-media').upload(fileName, file);
+      if (uploadError) {
+        errorCount++;
+        continue;
+      }
+
+      const { data } = supabase.storage.from('portfolio-media').getPublicUrl(fileName);
+      const title = file.name.replace(`.${fileExt}`, '');
+
+      const payload = {
+        id: `proj_${Date.now()}_${Math.random().toString(36).substring(7)}`,
+        title: title,
+        category_id: defaultCategoryId,
+        image: data.publicUrl
+      };
+
+      const { error: insertError } = await supabase.from('projects').insert([payload]);
+      if (insertError) {
+        errorCount++;
+      } else {
+        uploadedCount++;
+      }
+    }
+    
+    if (errorCount > 0 || uploadedCount > 0) {
+      alert(`Bulk Upload Finished! Added ${uploadedCount} projects. Failed: ${errorCount}`);
+    }
+    fetchProjects();
+    setUploading(false);
+    e.target.value = null;
+  };
+
   const handleAddSubmit = async (e) => {
     e.preventDefault();
     
@@ -127,6 +179,7 @@ const ProjectsManager = () => {
       image: formData.image || null,
       video: formData.video || null,
       document: formData.document || null,
+      website_link: formData.website_link || null,
     };
 
     let error;
@@ -141,7 +194,7 @@ const ProjectsManager = () => {
     if (!error) {
       setIsAdding(false);
       setIsEditing(false);
-      setFormData({ id: '', category_id: '', title: '', client_id: '', business_id: '', image: '', video: '', document: '' });
+      setFormData({ id: '', category_id: '', title: '', client_id: '', business_id: '', image: '', video: '', document: '', website_link: '' });
       fetchProjects();
     } else {
       alert(error.message);
@@ -182,20 +235,26 @@ const ProjectsManager = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h2>Manage Projects</h2>
-        <button 
-          onClick={() => {
-            if (isAdding) {
-              setIsAdding(false);
-              setIsEditing(false);
-              setFormData({ id: '', category_id: '', title: '', client_id: '', image: '', video: '', document: '' });
-            } else {
-              setIsAdding(true);
-            }
-          }}
-          style={{ background: 'var(--accent)', color: '#000', padding: '0.5rem 1rem', borderRadius: '4px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
-        >
-          {isAdding ? 'Cancel' : '+ Add Project'}
-        </button>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <label style={{ background: 'var(--accent)', color: '#000', padding: '0.5rem 1rem', borderRadius: '4px', cursor: uploading ? 'not-allowed' : 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
+            {uploading ? 'Uploading...' : 'Bulk Upload'}
+            <input type="file" accept="image/*" multiple onChange={handleBulkUpload} disabled={uploading} style={{ display: 'none' }} />
+          </label>
+          <button 
+            onClick={() => {
+              if (isAdding) {
+                setIsAdding(false);
+                setIsEditing(false);
+                setFormData({ id: '', category_id: '', title: '', client_id: '', image: '', video: '', document: '' });
+              } else {
+                setIsAdding(true);
+              }
+            }}
+            style={{ background: 'var(--accent)', color: '#000', padding: '0.5rem 1rem', borderRadius: '4px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
+          >
+            {isAdding ? 'Cancel' : '+ Add Project'}
+          </button>
+        </div>
       </div>
 
       {isAdding && (
@@ -249,6 +308,10 @@ const ProjectsManager = () => {
               <option value="">No Business</option>
               {businesses.map(business => <option key={business.id} value={business.id}>{business.name}</option>)}
             </select>
+          </div>
+          <div style={{ flex: 1, minWidth: '250px' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem' }}>Live Website Link (Optional)</label>
+            <input type="url" placeholder="https://example.com" value={formData.website_link} onChange={e => setFormData({...formData, website_link: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '4px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff' }} />
           </div>
           
           <div style={{ width: '100%', marginTop: '1rem' }}>

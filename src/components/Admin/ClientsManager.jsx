@@ -77,6 +77,49 @@ const ClientsManager = () => {
     setUploading(false);
   };
 
+  const handleBulkUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setUploading(true);
+    let uploadedCount = 0;
+    let errorCount = 0;
+
+    for (const file of files) {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage.from('portfolio-media').upload(fileName, file);
+      if (uploadError) {
+        errorCount++;
+        continue;
+      }
+
+      const { data } = supabase.storage.from('portfolio-media').getPublicUrl(fileName);
+      const name = file.name.replace(`.${fileExt}`, '');
+
+      const payload = {
+        name: name,
+        location: 'Global',
+        logo_url: data.publicUrl
+      };
+
+      const { error: insertError } = await supabase.from('clients').insert([payload]);
+      if (insertError) {
+        errorCount++;
+      } else {
+        uploadedCount++;
+      }
+    }
+    
+    if (errorCount > 0 || uploadedCount > 0) {
+      alert(`Bulk Upload Finished! Added ${uploadedCount} clients. Failed: ${errorCount}`);
+    }
+    fetchClients();
+    setUploading(false);
+    e.target.value = null;
+  };
+
   const handleAddSubmit = async (e) => {
     e.preventDefault();
     
@@ -137,20 +180,26 @@ const ClientsManager = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h2>Manage Clients</h2>
-        <button 
-          onClick={() => {
-            if (isAdding) {
-              setIsAdding(false);
-              setIsEditing(false);
-              setFormData({ id: '', name: '', location: '', logo_url: '' });
-            } else {
-              setIsAdding(true);
-            }
-          }}
-          style={{ background: 'var(--accent)', color: '#000', padding: '0.5rem 1rem', borderRadius: '4px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
-        >
-          {isAdding ? 'Cancel' : '+ Add Client'}
-        </button>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <label style={{ background: 'var(--accent)', color: '#000', padding: '0.5rem 1rem', borderRadius: '4px', cursor: uploading ? 'not-allowed' : 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
+            {uploading ? 'Uploading...' : 'Bulk Upload'}
+            <input type="file" accept="image/*" multiple onChange={handleBulkUpload} disabled={uploading} style={{ display: 'none' }} />
+          </label>
+          <button 
+            onClick={() => {
+              if (isAdding) {
+                setIsAdding(false);
+                setIsEditing(false);
+                setFormData({ id: '', name: '', location: '', logo_url: '' });
+              } else {
+                setIsAdding(true);
+              }
+            }}
+            style={{ background: 'var(--accent)', color: '#000', padding: '0.5rem 1rem', borderRadius: '4px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
+          >
+            {isAdding ? 'Cancel' : '+ Add Client'}
+          </button>
+        </div>
       </div>
 
       {isAdding && (

@@ -97,13 +97,31 @@ const ProjectCategory = () => {
                 controls
                 autoPlay
                 style={{ maxWidth: '95%', maxHeight: '95%', borderRadius: '8px', boxShadow: '0 0 30px rgba(0,0,0,0.5)' }}
-                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking video controls
+                onClick={(e) => e.stopPropagation()} 
               />
             ) : selectedMedia.type === 'document' ? (
               <iframe 
                 src={selectedMedia.url} 
                 style={{ width: '90%', height: '90%', borderRadius: '8px', border: 'none', background: '#fff' }}
               />
+            ) : selectedMedia.type === 'website' ? (
+              <div style={{ width: '90%', height: '90%', background: '#fff', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ background: '#f1f1f1', padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '1px solid #ddd' }}>
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f56' }}></div>
+                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ffbd2e' }}></div>
+                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27c93f' }}></div>
+                  </div>
+                  <div style={{ background: '#fff', padding: '0.25rem 1rem', borderRadius: '16px', fontSize: '0.85rem', color: '#555', flex: 1, textAlign: 'center', margin: '0 2rem' }}>
+                    {selectedMedia.url}
+                  </div>
+                  <a href={selectedMedia.url} target="_blank" rel="noreferrer" style={{ fontSize: '0.85rem', color: '#0066cc', textDecoration: 'none', fontWeight: 'bold' }}>Open in new tab ↗</a>
+                </div>
+                <iframe 
+                  src={selectedMedia.url} 
+                  style={{ width: '100%', flex: 1, border: 'none' }}
+                />
+              </div>
             ) : (
               <img 
                 src={selectedMedia.url} 
@@ -125,7 +143,9 @@ const ProjectCategory = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   onClick={() => {
-                    if (item.video) {
+                    if (item.website_link) {
+                      setSelectedMedia({ url: item.website_link, type: 'website' });
+                    } else if (item.video) {
                       setSelectedMedia({ url: item.video, type: 'video' });
                     } else if (item.document) {
                       setSelectedMedia({ url: item.document, type: 'document' });

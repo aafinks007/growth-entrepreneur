@@ -33,38 +33,52 @@ const HomeImagesManager = () => {
   };
 
   const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
 
     setUploading(true);
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+    let uploadedCount = 0;
+    let errorCount = 0;
 
-    const { error: uploadError } = await supabase.storage
-      .from('portfolio-media')
-      .upload(fileName, file);
+    for (const file of files) {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
 
-    if (uploadError) {
-      alert('Error uploading file: ' + uploadError.message);
-      setUploading(false);
-      return;
+      const { error: uploadError } = await supabase.storage
+        .from('portfolio-media')
+        .upload(fileName, file);
+
+      if (uploadError) {
+        console.error('Error uploading file:', uploadError);
+        errorCount++;
+        continue;
+      }
+
+      const { data } = supabase.storage
+        .from('portfolio-media')
+        .getPublicUrl(fileName);
+
+      const { error: insertError } = await supabase
+        .from('home_images')
+        .insert([{ image_url: data.publicUrl, is_visible: true }]);
+      
+      if (insertError) {
+        console.error('Error saving to database:', insertError);
+        errorCount++;
+      } else {
+        uploadedCount++;
+      }
     }
-
-    const { data } = supabase.storage
-      .from('portfolio-media')
-      .getPublicUrl(fileName);
-
-    const { error: insertError } = await supabase
-      .from('home_images')
-      .insert([{ image_url: data.publicUrl, is_visible: true }]);
     
-    if (insertError) {
-      alert('Error saving to database: ' + insertError.message);
-    } else {
-      fetchImages();
+    if (errorCount > 0) {
+      alert(`Finished. Successfully uploaded ${uploadedCount} images. Failed to upload ${errorCount} images.`);
     }
     
+    fetchImages();
     setUploading(false);
+    
+    // Reset input
+    e.target.value = null;
   };
 
   return (
@@ -86,7 +100,8 @@ const HomeImagesManager = () => {
             {uploading ? 'Uploading...' : '+ Upload Image'}
             <input 
               type="file" 
-              accept="image/*" 
+              accept="image/*"
+              multiple 
               onChange={handleFileUpload} 
               disabled={uploading} 
               style={{ display: 'none' }} 
