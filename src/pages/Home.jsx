@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import NetworkBackground from '../components/NetworkBackground';
 import { supabase } from '../supabaseClient';
@@ -36,6 +36,7 @@ const wordVariants = {
 };
 
 const Home = () => {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [homeImages, setHomeImages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,7 +50,7 @@ const Home = () => {
       if (profileData) setProfile(profileData);
 
       // Fetch Home Images
-      const { data: imagesData } = await supabase.from('home_images').select('*').eq('is_visible', true).order('created_at', { ascending: false });
+      const { data: imagesData } = await supabase.from('home_images').select('*').eq('is_visible', true).order('order_index', { ascending: true }).order('created_at', { ascending: false });
       if (imagesData) setHomeImages(imagesData);
 
       setLoading(false);
@@ -345,52 +346,135 @@ const Home = () => {
 
       {/* Home Image Gallery */}
       {homeImages.length > 0 && (
-        <section style={{ backgroundColor: 'var(--bg-secondary)', padding: '6rem 0', position: 'relative', zIndex: 10 }}>
-          <div className="container">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <h2 style={{ fontSize: '2.5rem', marginBottom: '3rem', textAlign: 'center', color: 'var(--accent)' }}>Gallery</h2>
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
-                gap: '1.5rem'
-              }}>
-                {homeImages.map((img, idx) => (
-                  <motion.div 
-                    key={img.id}
-                    onClick={() => setSelectedImage(img.image_url)}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: idx * 0.1 }}
-                    whileHover={{ scale: 1.05, zIndex: 10 }}
-                    style={{
-                      aspectRatio: '1/1',
-                      borderRadius: '16px',
-                      overflow: 'hidden',
-                      boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      cursor: 'zoom-in'
-                    }}
-                  >
-                    <img 
-                      src={img.image_url} 
-                      alt="Gallery" 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </section>
+        <GallerySection homeImages={homeImages} setSelectedImage={setSelectedImage} navigate={navigate} />
       )}
 
+      <style>{`
+        .hover-overlay {
+          opacity: 0;
+        }
+        div:hover > .hover-overlay {
+          opacity: 1;
+        }
+      `}</style>
     </div>
+  );
+};
+
+// Extracted Gallery Section with Pagination
+const GallerySection = ({ homeImages, setSelectedImage, navigate }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const imagesPerPage = 20;
+
+  const indexOfLastImage = currentPage * imagesPerPage;
+  const indexOfFirstImage = indexOfLastImage - imagesPerPage;
+  const currentImages = homeImages.slice(indexOfFirstImage, indexOfLastImage);
+  const totalPages = Math.ceil(homeImages.length / imagesPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  return (
+    <section style={{ backgroundColor: 'var(--bg-secondary)', padding: '6rem 0', position: 'relative', zIndex: 10 }}>
+      <div className="container">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '3rem', textAlign: 'center', color: 'var(--accent)' }}>Gallery</h2>
+          
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
+            gap: '1.5rem'
+          }}>
+            {currentImages.map((img, idx) => (
+              <motion.div 
+                key={img.id}
+                onClick={() => {
+                  if (img.link_url) {
+                    navigate(img.link_url);
+                  } else {
+                    setSelectedImage(img.image_url);
+                  }
+                }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                whileHover={{ scale: 1.05, zIndex: 10 }}
+                style={{
+                  aspectRatio: '1/1',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  cursor: img.link_url ? 'pointer' : 'zoom-in',
+                  position: 'relative'
+                }}
+              >
+                <img 
+                  src={img.image_url} 
+                  alt="Gallery" 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+                {img.link_url && (
+                  <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0, transition: 'opacity 0.3s' }} className="hover-overlay">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '3rem', gap: '1rem' }}>
+              <button 
+                onClick={handlePrevPage} 
+                disabled={currentPage === 1}
+                style={{ 
+                  padding: '0.8rem 1.5rem', 
+                  borderRadius: '8px', 
+                  border: 'none', 
+                  background: currentPage === 1 ? 'rgba(255,255,255,0.05)' : 'var(--accent)', 
+                  color: currentPage === 1 ? 'rgba(255,255,255,0.3)' : '#000',
+                  cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                  fontWeight: 'bold',
+                  transition: 'all 0.3s'
+                }}
+              >
+                &larr; Previous
+              </button>
+              <span style={{ color: 'var(--text-secondary)', fontWeight: 'bold' }}>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button 
+                onClick={handleNextPage} 
+                disabled={currentPage === totalPages}
+                style={{ 
+                  padding: '0.8rem 1.5rem', 
+                  borderRadius: '8px', 
+                  border: 'none', 
+                  background: currentPage === totalPages ? 'rgba(255,255,255,0.05)' : 'var(--accent)', 
+                  color: currentPage === totalPages ? 'rgba(255,255,255,0.3)' : '#000',
+                  cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                  fontWeight: 'bold',
+                  transition: 'all 0.3s'
+                }}
+              >
+                Next &rarr;
+              </button>
+            </div>
+          )}
+        </motion.div>
+      </div>
+    </section>
   );
 };
 
