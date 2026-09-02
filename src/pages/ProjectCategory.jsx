@@ -100,10 +100,24 @@ const ProjectCategory = () => {
                 onClick={(e) => e.stopPropagation()} 
               />
             ) : selectedMedia.type === 'document' ? (
-              <iframe 
-                src={selectedMedia.url} 
-                style={{ width: '90%', height: '90%', borderRadius: '8px', border: 'none', background: '#fff' }}
-              />
+              <div style={{ width: '90%', height: '90%', background: '#fff', borderRadius: '8px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                <div style={{ padding: '1rem', background: '#f8f9fa', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h3 style={{ margin: 0, fontSize: '1.2rem', color: '#333' }}>Document Viewer</h3>
+                  <a 
+                    href={selectedMedia.url} 
+                    target="_blank" 
+                    rel="noreferrer" 
+                    style={{ background: 'var(--accent)', color: '#000', padding: '0.5rem 1rem', borderRadius: '4px', textDecoration: 'none', fontWeight: 'bold', fontSize: '0.9rem' }}
+                  >
+                    Open Full PDF ↗
+                  </a>
+                </div>
+                <iframe 
+                  src={`https://docs.google.com/gview?url=${encodeURIComponent(selectedMedia.url)}&embedded=true`} 
+                  style={{ width: '100%', flex: 1, border: 'none' }}
+                  title="Document Viewer"
+                />
+              </div>
             ) : selectedMedia.type === 'website' ? (
               <div style={{ width: '90%', height: '90%', background: '#fff', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                 <div style={{ background: '#f1f1f1', padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '1px solid #ddd' }}>
@@ -196,14 +210,23 @@ const ProjectCategory = () => {
                       style={{ 
                         width: '100%', 
                         height: '100%', 
-                        background: 'rgba(255,255,255,0.05)', 
+                        background: 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02))', 
                         display: 'flex', 
+                        flexDirection: 'column',
                         alignItems: 'center', 
                         justifyContent: 'center',
                         transition: 'transform 0.5s ease',
+                        border: '1px solid rgba(255,255,255,0.1)'
                       }}
                     >
-                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '1rem' }}>
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                      </svg>
+                      <span style={{ color: '#fff', fontWeight: '500', fontSize: '1.1rem' }}>View PDF Document</span>
                     </div>
                   ) : item.website_link ? (
                     <div 
@@ -211,14 +234,21 @@ const ProjectCategory = () => {
                       style={{ 
                         width: '100%', 
                         height: '100%', 
-                        background: 'rgba(255,255,255,0.05)', 
+                        background: 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02))', 
                         display: 'flex', 
+                        flexDirection: 'column',
                         alignItems: 'center', 
                         justifyContent: 'center',
                         transition: 'transform 0.5s ease',
+                        border: '1px solid rgba(255,255,255,0.1)'
                       }}
                     >
-                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '1rem' }}>
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                      </svg>
+                      <span style={{ color: '#fff', fontWeight: '500', fontSize: '1.1rem' }}>Visit Live Website</span>
                     </div>
                   ) : (
                     <div className="project-image" style={{ width: '100%', height: '100%', background: 'rgba(255,255,255,0.05)' }} />
@@ -237,8 +267,29 @@ const ProjectCategory = () => {
                     }}
                     className="project-overlay"
                   >
-                    <h3 style={{ color: '#fff', marginBottom: '0.5rem' }}>{item.title}</h3>
-                    <p style={{ color: 'var(--accent)' }}>{item.category || category.category}</p>
+                    <h3 style={{ color: '#fff', margin: 0 }}>{item.title}</h3>
+                    
+                    {/* Media Type Badges */}
+                    <div style={{ position: 'absolute', top: '1rem', right: '1rem', display: 'flex', gap: '0.5rem' }}>
+                      {item.website_link && (
+                        <div style={{ background: 'var(--accent)', color: '#000', padding: '0.3rem 0.6rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+                          Live Site
+                        </div>
+                      )}
+                      {item.document && !item.website_link && (
+                        <div style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(4px)', color: '#fff', padding: '0.3rem 0.6rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                          PDF
+                        </div>
+                      )}
+                      {item.video && !item.document && !item.website_link && (
+                        <div style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(4px)', color: '#fff', padding: '0.3rem 0.6rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                          Video
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               );

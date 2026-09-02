@@ -106,8 +106,7 @@ const Projects = () => {
                   }}
                   className="project-overlay"
                 >
-                  <h3 style={{ color: '#fff', marginBottom: '0.5rem' }}>{project.title}</h3>
-                  <p style={{ color: 'var(--accent)' }}>{project.category}</p>
+                  <h3 style={{ color: '#fff', margin: 0 }}>{project.title}</h3>
                 </div>
               </motion.div>
             );

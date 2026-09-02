@@ -152,8 +152,7 @@ const BusinessDetail = () => {
                     }}
                     className="project-overlay"
                   >
-                    <h3 style={{ color: '#fff', marginBottom: '0.5rem' }}>{item.title}</h3>
-                    <p style={{ color: 'var(--accent)' }}>{item.category || item.project_categories?.title}</p>
+                    <h3 style={{ color: '#fff', margin: 0 }}>{item.title}</h3>
                   </div>
                 </motion.div>
               );
