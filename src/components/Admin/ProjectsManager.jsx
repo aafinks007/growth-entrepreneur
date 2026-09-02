@@ -349,8 +349,16 @@ const ProjectsManager = () => {
                         ) : project.image ? (
                           <img src={project.image} style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />
                         ) : project.document ? (
-                          <div style={{ width: '60px', height: '40px', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '4px' }}>Doc</div>
-                        ) : null}
+                          <div style={{ width: '60px', height: '40px', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '4px' }}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                          </div>
+                        ) : project.website_link ? (
+                          <div style={{ width: '60px', height: '40px', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '4px' }}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                          </div>
+                        ) : (
+                          <div style={{ width: '60px', height: '40px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }} />
+                        )}
                       </td>
                       <td style={{ padding: '1rem', fontWeight: '500' }}>{project.title}</td>
                       <td style={{ padding: '1rem', color: 'var(--text-secondary)' }}>{project.project_categories?.title || 'Unknown'}</td>
