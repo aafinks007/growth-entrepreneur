@@ -38,7 +38,13 @@ const ProjectsManager = () => {
     const { data: clientData } = await supabase.from('clients').select('*');
     const { data: businessData } = await supabase.from('businesses').select('*');
     
-    if (!projError) setProjects(projData);
+    if (projError) {
+      console.error('Error fetching projects:', projError);
+      alert('Error loading projects: ' + projError.message + '\n\nPlease make sure you ran the SQL script in Supabase!');
+    } else {
+      setProjects(projData);
+    }
+    
     if (catData) setCategories(catData);
     if (clientData) setClients(clientData);
     if (businessData) setBusinesses(businessData);
